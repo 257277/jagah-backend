@@ -14,9 +14,7 @@ app = Flask(__name__)
 CORS(app)
 load_dotenv()
 app.config["MONGO_URI"] = os.getenv("mongo_url")
-#removing ssl Again
-mongo = PyMongo(app)
-
+mongo = PyMongo(app, ssl_cert_reqs=CERT_NONE)
 
 @app.route("/", methods=["GET"])
 def home():
@@ -120,9 +118,10 @@ def bookHotel():
         return jsonify({"message":"Hotel is booked successfull"})
     
 @app.route("/booking",methods=["GET"])
-def booking():
+def booking():    
      try:
-        data = list(mongo.db.bookings.find())
+        user_id = request.args.get("userId")
+        data = list(mongo.db.bookings.find({"userid": user_id}))
         # Serialize the MongoDB data to JSON using json_util
         json_data = json_util.dumps(data)
         return jsonify({"message": json_data})
@@ -186,7 +185,7 @@ def selfProperty():
     user_id = request.args.get("userId")
 
     try:
-        data = list(mongo.db.property.find())
+        data = list(mongo.db.property.find({"$or": [{"Sold_To": user_id}, {"userid": user_id}]}))
         json_data = json_util.dumps(data)
         return jsonify({"message": json_data})
     except Exception as e:
@@ -197,7 +196,7 @@ def selfProperty():
 def deleteProperty():
     property_id = request.args.get("propertyId")
     try:
-        # Convert the property_id string to an ObjectId.   
+        # Convert the property_id string to an ObjectId
         obj_id = ObjectId(property_id)
         mongo.db.property.delete_one({"_id": obj_id})
         return jsonify({"message": "Property deleted successfully"})
