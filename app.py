@@ -195,7 +195,7 @@ def selfProperty():
 def deleteProperty():
     property_id = request.args.get("propertyId")
     try:
-        # Convert the property_id string to an ObjectId
+        # Convert the property_id string to an ObjectId    
         obj_id = ObjectId(property_id)
         mongo.db.property.delete_one({"_id": obj_id})
         return jsonify({"message": "Property deleted successfully"})
