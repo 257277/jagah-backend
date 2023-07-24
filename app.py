@@ -186,7 +186,7 @@ def selfProperty():
     user_id = request.args.get("userId")
 
     try:
-        data = list(mongo.db.property.find({"Sold_To": user_id}))
+        data = list(mongo.db.property.find())
         json_data = json_util.dumps(data)
         return jsonify({"message": json_data})
     except Exception as e:
