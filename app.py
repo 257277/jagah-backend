@@ -14,7 +14,9 @@ app = Flask(__name__)
 CORS(app)
 load_dotenv()
 app.config["MONGO_URI"] = os.getenv("mongo_url")
+#removing ssl
 mongo = PyMongo(app)
+
 
 @app.route("/", methods=["GET"])
 def home():
