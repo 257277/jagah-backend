@@ -17,7 +17,7 @@ app = Flask(__name__)
 CORS(app)
 load_dotenv()
 app.config["MONGO_URI"] = os.getenv("mongo_url")
-mongo = PyMongo(app, ssl_cert_reqs=CERT_NONE)
+mongo = PyMongo(app)
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 @app.route("/", methods=["GET"])
 def home():
