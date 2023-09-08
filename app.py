@@ -186,7 +186,6 @@ def buyproperty():
 @app.route("/selfProperty", methods=["GET"])
 def selfProperty():
     user_id = request.args.get("userId")
-
     try:
         data = list(mongo.db.property.find({"$or": [{"Sold_To": user_id}, {"userid": user_id}]}))
         json_data = json_util.dumps(data)
